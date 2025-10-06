@@ -1,34 +1,689 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+body {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2C3E50 0%, #34495E 50%, #2C3E50 100%);
+  color: #2ECC71;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
+.App {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Background with circuit pattern */
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://images.pexels.com/photos/9784235/pexels-photo-9784235.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  opacity: 0.1;
+  z-index: -2;
+}
+
+.background-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, 
+    rgba(44, 62, 80, 0.9) 0%, 
+    rgba(52, 73, 94, 0.8) 50%, 
+    rgba(44, 62, 80, 0.9) 100%);
+  z-index: -1;
+}
+
+.main-container {
+  position: relative;
+  z-index: 1;
+  padding: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header Styles */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  background: rgba(46, 204, 113, 0.1);
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(46, 204, 113, 0.2);
+}
+
+.app-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #2ECC71;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+  letter-spacing: 2px;
+}
+
+.digital-clock {
+  margin-top: 1rem;
+}
+
+.time-display {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #2ECC71;
+  text-shadow: 0 0 30px rgba(46, 204, 113, 0.8);
+  margin-bottom: 0.5rem;
+  letter-spacing: 3px;
+}
+
+.date-display {
+  font-size: 1.2rem;
+  color: #A4C2A5;
+  font-weight: 600;
+}
+
+/* Main Content Grid */
+.app-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* Panel Base Styles */
+.left-panel, .center-panel, .right-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Card Base Styles */
+.voice-commands, .world-time-container, .timer-manager, .ringtone-manager, .stopwatch {
+  background: rgba(46, 204, 113, 0.08);
+  border: 2px solid rgba(46, 204, 113, 0.25);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 8px 32px rgba(46, 204, 113, 0.15);
+  transition: all 0.3s ease;
+}
+
+.voice-commands:hover, .world-time-container:hover, .timer-manager:hover, 
+.ringtone-manager:hover, .stopwatch:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(46, 204, 113, 0.25);
+  border-color: rgba(46, 204, 113, 0.4);
+}
+
+.section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+}
+
+/* Voice Commands Styles */
+.connection-status {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.connection-status.connected {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ECC71;
+  border: 1px solid #2ECC71;
+}
+
+.connection-status.disconnected {
+  background: rgba(231, 76, 60, 0.2);
+  color: #E74C3C;
+  border: 1px solid #E74C3C;
+}
+
+.voice-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.voice-button {
+  background: linear-gradient(45deg, #2ECC71, #27AE60);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.voice-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.voice-button.listening {
+  background: linear-gradient(45deg, #E74C3C, #C0392B);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); }
+  50% { box-shadow: 0 6px 25px rgba(231, 76, 60, 0.6); }
+  100% { box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3); }
+}
+
+.voice-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.voice-status {
+  margin-bottom: 1rem;
+}
+
+.status-text {
+  color: #A4C2A5;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.transcript {
+  color: #2ECC71;
+  text-align: center;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.voice-examples {
+  margin-top: 1rem;
+}
+
+.voice-examples h4 {
+  color: #2ECC71;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.voice-examples ul {
+  list-style: none;
+  color: #A4C2A5;
+}
+
+.voice-examples li {
+  margin: 0.3rem 0;
+  padding: 0.3rem 0.5rem;
+  border-left: 3px solid #2ECC71;
+  background: rgba(46, 204, 113, 0.1);
+  border-radius: 0 8px 8px 0;
+  font-weight: 600;
+}
+
+/* World Time Styles */
+.world-time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.world-time-card {
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.world-time-card:hover {
+  transform: scale(1.05);
+  background: rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.5);
+}
+
+.city-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 0.3rem;
+}
+
+.country-name {
+  font-size: 0.8rem;
+  color: #A4C2A5;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.city-time {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 0.3rem;
+}
+
+.city-date {
+  font-size: 0.7rem;
+  color: #A4C2A5;
+  font-weight: 600;
+}
+
+/* Timer Manager Styles */
+.timer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.timer-card {
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.timer-card:hover {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.5);
+  transform: translateX(5px);
+}
+
+.timer-info {
+  flex: 1;
+}
+
+.timer-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 0.3rem;
+}
+
+.timer-time {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 0.3rem;
+}
+
+.timer-target {
+  font-size: 0.8rem;
+  color: #A4C2A5;
+  font-weight: 600;
+}
+
+.cancel-button {
+  background: linear-gradient(45deg, #E74C3C, #C0392B);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.no-timers {
+  text-align: center;
+  color: #A4C2A5;
+  padding: 2rem;
+}
+
+.help-text {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Ringtone Manager Styles */
+.upload-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  display: none;
+}
+
+.upload-button {
+  background: linear-gradient(45deg, #3498DB, #2980B9);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upload-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.upload-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ringtone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.ringtone-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 10px;
+  padding: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.ringtone-item:hover {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: rgba(46, 204, 113, 0.5);
+}
+
+.ringtone-info {
+  flex: 1;
+}
+
+.ringtone-name {
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 0.2rem;
+}
+
+.ringtone-date {
+  font-size: 0.8rem;
+  color: #A4C2A5;
+  font-weight: 600;
+}
+
+.ringtone-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.play-button, .delete-button {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.play-button:hover {
+  background: rgba(46, 204, 113, 0.2);
+  transform: scale(1.1);
+}
+
+.delete-button:hover {
+  background: rgba(231, 76, 60, 0.2);
+  transform: scale(1.1);
+}
+
+.no-ringtones {
+  text-align: center;
+  color: #A4C2A5;
+  padding: 1rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Stopwatch Styles */
+.stopwatch-display {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2ECC71;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 20px rgba(46, 204, 113, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.stopwatch-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.control-button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.control-button.start {
+  background: linear-gradient(45deg, #2ECC71, #27AE60);
+  color: white;
+}
+
+.control-button.stop {
+  background: linear-gradient(45deg, #E74C3C, #C0392B);
+  color: white;
+}
+
+.control-button.lap {
+  background: linear-gradient(45deg, #F39C12, #E67E22);
+  color: white;
+}
+
+.control-button.reset {
+  background: linear-gradient(45deg, #95A5A6, #7F8C8D);
+  color: white;
+}
+
+.control-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.laps-section {
+  margin-top: 1rem;
+}
+
+.laps-section h4 {
+  color: #2ECC71;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.laps-list {
+  max-height: 200px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lap-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(46, 204, 113, 0.1);
+  border: 1px solid rgba(46, 204, 113, 0.3);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: #2ECC71;
+}
+
+/* Loading States */
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: #A4C2A5;
+  font-weight: 600;
+}
+
+.loading-spinner::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(46, 204, 113, 0.3);
+  border-top: 2px solid #2ECC71;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .app-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .right-panel {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    padding: 1rem;
+  }
+  
+  .app-title {
+    font-size: 2rem;
+  }
+  
+  .time-display {
+    font-size: 2.5rem;
+  }
+  
+  .app-main {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .right-panel {
+    grid-column: span 1;
     display: flex;
     flex-direction: column;
+  }
+  
+  .world-time-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+  
+  .stopwatch-display {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    font-size: 1.5rem;
+  }
+  
+  .time-display {
+    font-size: 2rem;
+  }
+  
+  .world-time-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .stopwatch-controls {
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+  }
+  
+  .control-button {
+    width: 100px;
+  }
 }
 
-.App-link {
-    color: #61dafb;
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Focus styles for keyboard navigation */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #2ECC71;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .voice-commands, .world-time-container, .timer-manager, .ringtone-manager, .stopwatch {
+    border-width: 3px;
+  }
+  
+  .section-title {
+    text-shadow: none;
+    font-weight: 800;
+  }
 }
