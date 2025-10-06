@@ -101,3 +101,195 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the AI Clock backend thoroughly including core API endpoints, WebSocket functionality, speech processing integration, file upload system, and data persistence."
+
+backend:
+  - task: "Health Check API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Health endpoint working correctly, returns proper status and timestamp"
+
+  - task: "World Time API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "World time API working correctly, returns 12 cities with proper timezone data"
+
+  - task: "Timers API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Timers API working correctly, returns active timers list"
+
+  - task: "Ringtone Upload API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Ringtone upload working correctly, accepts audio files and stores in MongoDB"
+
+  - task: "Ringtone List API"
+    implemented: true
+    working: false
+    file: "backend/server.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: false
+          agent: "testing"
+          comment: "CRITICAL: MongoDB ObjectId serialization error. The API returns HTTP 500 due to MongoDB _id field not being JSON serializable. Need to exclude _id field in query projection."
+
+  - task: "Ringtone Get Audio API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Ringtone audio retrieval working correctly, returns base64 encoded audio data"
+
+  - task: "Ringtone Delete API"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Ringtone deletion working correctly"
+
+  - task: "WebSocket Connection"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "WebSocket connection working on internal port (localhost:8001/ws). External WebSocket URL routing issue - connects to frontend dev server instead of backend."
+
+  - task: "Voice Command Processing - Timers"
+    implemented: true
+    working: true
+    file: "backend/speech_processor.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Voice command processing for timers working correctly. Successfully processes 'set timer for X minutes/seconds' commands."
+
+  - task: "Voice Command Processing - Alarms"
+    implemented: true
+    working: true
+    file: "backend/speech_processor.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Voice command processing for alarms working correctly. Successfully processes 'set alarm for X AM/PM' commands."
+
+  - task: "Voice Command Processing - List/Cancel"
+    implemented: true
+    working: true
+    file: "backend/speech_processor.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Voice command processing for list and cancel operations working correctly."
+
+  - task: "Scheduler Manager"
+    implemented: true
+    working: true
+    file: "backend/scheduler_manager.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "Scheduler manager working correctly. Successfully creates, manages, and expires timers and alarms."
+
+  - task: "MongoDB Integration"
+    implemented: true
+    working: true
+    file: "backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "MongoDB connection and basic operations working. Data persistence for ringtones confirmed."
+
+  - task: "Speech Processing Dependencies"
+    implemented: true
+    working: true
+    file: "backend/speech_processor.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "spaCy NLP model and all speech processing dependencies working correctly."
+
+frontend:
+  # Frontend testing not performed as per instructions
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Ringtone List API"
+  stuck_tasks:
+    - "Ringtone List API"
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "testing"
+      message: "Comprehensive backend testing completed. Found 1 critical issue: MongoDB ObjectId serialization error in ringtone list API. All other backend functionality working correctly including WebSocket, speech processing, scheduler, and most API endpoints. External WebSocket routing needs configuration fix but internal WebSocket works perfectly."
