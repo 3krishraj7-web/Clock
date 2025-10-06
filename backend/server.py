@@ -226,7 +226,7 @@ async def upload_ringtone(file: UploadFile = File(...)):
 async def get_ringtones():
     """Get all uploaded ringtones"""
     try:
-        ringtones = await db.ringtones.find({}, {"file_data": 0}).to_list(100)
+        ringtones = await db.ringtones.find({}, {"_id": 0, "file_data": 0}).to_list(100)
         return {"ringtones": ringtones}
     except Exception as e:
         logger.error(f"Error getting ringtones: {e}")
